@@ -16,13 +16,13 @@
     const regexStr = regexArr.join("") //теперь мы объединили все элементы массива в одну строку
     //дальше смотри оказывается есть reverse чтобы ее перевернуть
     //для понятности я тебе это отдельными степами
-    //так как у нас уже есть массивом изначальная строчка можно скипнуть этап split
-    const step1 = regexArr.reverse() //теперь мы перевернули массив
-    console.log(step1)
-    //теперь склеиваем его обратно в строку
-    const step2 = step1.join("")
+    
+    //!sic я допустила ошкибку он мутируется, поэтому лучше заюзаю спред 
+    // (он сделает поверхностную копию)
+    const reversedStr = [...regexArr].reverse().join("")
+    
     //и теперь сравниваем обе строки, если они равны - строка палиндром, если нет - не палиндром
-    return regexStr === step2
+    return regexStr === reversedStr
 
 
 }
@@ -39,6 +39,29 @@
  //первое решение
 
  const test2 = [1,2,2,3,1,4]
+
+ function isVasya(arr) {
+    let newArr = [];
+    let counterMax = arr.length
+    for (let i = 0; i < counterMax; i++) {
+        let counterNewArr = newArr.length
+        let u;
+        for (u = 0; u < counterNewArr; u++) {
+            if (newArr[u] === arr[i]) {
+                break 
+            }
+        }
+        if (u === counterNewArr) {
+            newArr.push(arr[i])
+        }
+
+    }
+
+    return newArr
+
+ }
+
+console.log(isVasya(test2))
 
  function isUnique(arr) {
     const counter = arr.length;
@@ -164,4 +187,86 @@ console.log(test7)
 console.log(clone)
 
 //третий способ - ВеЕеЕЕлоСипеЕд
+//когда нибудь решу кхм
+function myownrecursion(obj) {
+    if (obj === null || typeof obj !== 'object') {
+        return obj
+    }
+}
 
+
+/*
+Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+You can return the answer in any order.
+
+*/
+
+
+const nums = [3, 2, 4];
+const target = 6;
+
+var twoSum = function(nums, target) {
+    let firstIndex = undefined; //ну чисто на всякий
+    let secondIndex = undefined;
+    
+    for (let i = 0; i < nums.length; i++) {
+
+        let toFind = target - nums[i];
+        console.log(toFind)
+        let findedIndex = nums.indexOf(toFind);
+        //окей оно может быть и отрицательным
+        //но нам ведь надо плюсовать, т.е условно 6 - 11 даст -5 (т.е нам надо искать -5) но ведь -5 + 6 даст -1 что делать?
+        //ну или я просто не умею в матиматику что вероятнее
+        if (findedIndex !== -1 && i !== findedIndex) {
+            console.log("нашли совпадение")
+            firstIndex = i
+            secondIndex = findedIndex
+            break
+        }
+
+       
+
+    }
+
+    let arr = [firstIndex, secondIndex]
+    return arr
+};
+
+console.log(twoSum(nums, target))
+//да мое решение работает, но литкод говорит про его не оптимальность по скорости, и очевидно правильное будет map его и разберем
+
+var twoSum = function(nums, target) {
+    const newmap = new Map()
+    //создаем новый мап (обьект хранящий пару ключ-значение)
+    let firstIndex
+    let secondIndex
+    for (let i = 0; i < nums.length; i++) {
+        //находим то что должны найти
+        let toFind = target - nums[i];
+        //с помощью встроенной фукнции получаем true or false есть ли уже в нашем обьекте подходящее значение
+        if (newmap.has(toFind)) {
+            //если нашли то получаем индекс который мы же сохранили
+            firstIndex = newmap.get(toFind)
+            //и индекс того айтема на котором и нашли совпадение
+            secondIndex = i;
+        } else {
+            //если нет совпадения то как раз таки созраняем в соотношении ключ-значение, где ключ - это число а значение индекс, чтобы сверху его получить
+            newmap.set(nums[i], i)
+        }
+    }
+    //и вуаля собираем в аррей и выдаем
+    return [firstIndex, secondIndex]
+}
+
+//для закрепления еще палиндромчик Given an integer x, return true if x is a palindrome, and false otherwise.
+
+const someTextToTest = -11122111;
+
+function palindromeForNumbers(x) {
+    //завтра доделаю
+}
+
+palindromeForNumbers(someTextToTest)
