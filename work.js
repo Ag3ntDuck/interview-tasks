@@ -261,12 +261,264 @@ var twoSum = function(nums, target) {
     return [firstIndex, secondIndex]
 }
 
-//для закрепления еще палиндромчик Given an integer x, return true if x is a palindrome, and false otherwise.
+//еще палиндром, но уже для работы только циферок
+// Given an integer x, return true if x is a palindrome, and false otherwise.
 
-const someTextToTest = -11122111;
+const someTextToTest = 121;
 
 function palindromeForNumbers(x) {
-    //завтра доделаю
+   const toArray = Array.from(String(x))
+   const reversedArray = [...toArray].reverse().join('');
+   const toArrayJoin = toArray.join('')
+   return toArrayJoin === reversedArray
 }
 
-palindromeForNumbers(someTextToTest)
+console.log(palindromeForNumbers(someTextToTest))
+
+//уже по классике мое решение не оптимальное, поэтому я спросила а как было бы по нормальному
+
+function palindromeForNumbers2(x) {
+    const toString = String(x);
+    let i;
+    for (i = 0; i < Math.floor(toString.length / 2); i++) {
+        //сразу проверка на минус чтобы даже не думал дальше идти
+        if (x < 0) {return false}
+
+        if (toString[i] !== toString[toString.length - 1 - i]) { //мы сравниваем если число конкретное которое у нас щас не равно противоположного с конца
+            //минус 1 нужен потому что отчет идет всегда с 0, а минус i чтобыпроверить не последнее число, а число которое ровно противоложно тому что сейчас
+            //т.е например 1234321 сейчас проверяем 2 индекс [1], если удалим из длинны только единичку то это будет [6] - соответственно число 1 и так всегда
+            //поэтому если сделать - 1 - i индекс в данном примере будет 1 т.е он будет показывать на число под индексом [5] - это твойка с конца
+            return false
+        }
+
+    }
+    return true
+}
+
+console.log(palindromeForNumbers2(someTextToTest))
+
+
+/* 
+Given an array of positive integers nums, return an array answer that consists of the digits of each integer in nums after separating them in the same order they appear in nums.
+
+To separate the digits of an integer is to get all the digits it has in the same order.
+
+For example, for the integer 10921, the separation of its digits is [1,0,9,2,1].
+
+
+*/
+
+const numss = [12, 1337, 12]
+
+var separateDigits = function(nums) {
+    const test1 = nums.join('').split('').map(Number)
+    return test1
+};
+
+
+/* еее я кодер самую простую штуку даже смогла написать без мам пап и интернетов
+Runtime
+1
+ms
+Beats
+98.89%
+*/
+console.log(separateDigits(numss))
+
+
+
+/*
+You are given a string moves of length n consisting only of characters 'L', 'R', and '_'. The string represents your movement on a number line starting from the origin 0.
+
+In the ith move, you can choose one of the following directions:
+
+move to the left if moves[i] = 'L' or moves[i] = '_'
+move to the right if moves[i] = 'R' or moves[i] = '_'
+Return the distance from the origin of the furthest point you can get to after n moves.
+
+
+
+*/
+
+//я ненавижу математику
+//я тут сделала все САМА !!!!!!!! я даже решила побыть fancy заюзала switch и += :3
+const moves1 = "RRLL__LL";
+var furthestDistanceFromOrigin = function(moves) {
+    let letterR = 0;
+    let letterL = 0;
+    let wildCard = 0;
+    for (let i = 0; i < moves.length; i++) {
+        switch (moves[i]) {
+            case "R":
+            letterR += 1;
+            console.log(letterR)
+            break;
+            case "L":
+            letterL += 1;
+            break;
+            case "_":
+            wildCard += 1;
+            break;
+        }
+    }
+
+    let answer = Math.abs(letterR - letterL) + wildCard
+    return answer
+};
+
+console.log(furthestDistanceFromOrigin(moves1))
+
+
+/*
+You are given two strings word1 and word2. Merge the strings by adding letters in alternating order, starting with word1. If a string is longer than the other, append the additional letters onto the end of the merged string.
+
+*/
+/*
+Итак что мы имеем вводное надо сравнить их размеры и одинаковые части ровно друг к другу приклеить а ту часть которая больше добавить в конце отдельно
+ т.е ..a  b  c  d  e
+         q  w  e  t  y u r i
+*/
+
+
+//ну по классике как это решила я
+const firstWord = "ada";
+const secondWord = "qwerty";
+var mergeAlternately = function(word1, word2) {
+    let toTake;
+    if (word1.length >= word2.length) {
+        toTake = word1
+    } else {
+       toTake = word2 
+    }
+    let newArr = [];
+    let filterUndefined = [];
+    for (let i = 0; i < toTake.length; i++) {
+        if (word1 !== undefined && word2 !== undefined) {
+            newArr.push(word1[i], word2[i])
+            filterUndefined = newArr.filter(function (el) {
+                return el !== undefined
+            })
+        }
+        
+    }
+   
+    filterUndefined = filterUndefined.join('')
+    return filterUndefined
+};
+
+console.log(mergeAlternately(firstWord, secondWord ))
+//а вот как правильно с подсказками
+//Math.max - ну да, довольно логично что уже есть встроенная функция которая берет максимальную цифру...
+
+
+let mergeAlternately2 = function(word1, word2) {
+    let newArr = [];
+    let constanta = Math.max(word1.length, word2.length)
+    //забавно, я просто вынесла за скобки max и это типа оч повысило результаты на литкоде за счет того что оно не высчитывается каждую итерацию, надо запомнить, это важно
+    for (let i = 0; i < constanta; i++) {
+        if (i < word1.length) {
+            newArr.push(word1[i])
+        } 
+
+        if (i < word2.length) {
+            newArr.push(word2[i])
+        }
+    }
+    return newArr.join('')
+}
+
+console.log(mergeAlternately2(firstWord, secondWord))
+
+
+/*
+For two strings s and t, we say "t divides s" if and only if s = t + t + t + ... + t + t (i.e., t is concatenated with itself one or more times).
+
+Given two strings str1 and str2, return the largest string x such that x divides both str1 and str2.
+
+Example 1:
+
+Input: str1 = "ABCABC", str2 = "ABC"
+
+Output: "ABC"
+
+Example 2:
+
+Input: str1 = "ABABAB", str2 = "ABAB"
+
+Output: "AB"
+
+
+
+ */
+ //как я думаю первое условно как-то разделить этот массив на равные части и их проверять? но нет, не то.. или то?
+        //типа решать как палиндром? сделать гекесом вот str2 и по нему отрезать?
+        //const reg = str1.match(/[ABC$]/g).join('') //ну да оно нашло, но как это теперь разделить, split? а можно ли сплит регексом лол
+        //const reg2 = reg.split('') //да это сработало но не так как я хотела оно их убрало хпхпхп
+        //может быть trim не не сработает я хз крч
+        //console.log(reg2)
+        //или надо как-то отфильтрова это искомое с помощью filter ? но у меня не получилось
+        //ладно я сдаюсь я посмотрю в подсказки
+
+
+ let str1 = "ABABABABABABAB"; 
+ let str2 = "ABABABAB";
+
+
+
+var gcdOfStrings = function(str1, str2) {
+    
+    let a = str1.length;
+    let b = str2.length;  
+
+        if (str1 + str2 === str2 + str1) {
+            //Я НЕ ЗНАЮ МАТЕМАТИКУ 7 КЛАСС Я НЕ МОГЛА ПОНЯТЬ 2 ЧАСА КАК СДЕЛАТЬ НАИБОЛЬШИЙ ОБЩИЙ ДЕЛИТЕЛЬ ЭТО КОШМАР
+          while (b !== 0) {
+                let remain = b; 
+                b = a % b;
+                a = remain;
+            }
+
+        } else if (str1 + str2 !== str2 + str1) {
+            return ""
+        }
+
+        
+        
+    return str1.slice(0, a)
+};
+
+
+console.log(gcdOfStrings(str1, str2))
+
+console.log (str1.split('').join(''))
+
+
+/* 
+короче чо я позакрепила на данный моумент
+regex - /abc$/g - для поиска конкретного фрагмента с флагом g - все совпадения $ - только в самом конце
+Math.abs - делает всегда положительным число
+Math.max - берет большее
+split() разделяем строку и делаем массивом если с '' то разделит каждый элемент запятой и скобками ''
+join() соединяет массив в строку если с '' то уберет запятые
+reverse() реверсит массив т.е ABC станет CBA
+Array.from() - делает массив из строки или чисел
+String() превращает то что в скобках с трингу и Number()  превращает то что в скобках в цифры если в нем не цифры то выдаст NaN
+indexOf() ищет в массиве совпадение с штукой которую ищем в скобках если есть выдаст ее индекс, если нет выдаст -1
+includes() ищет есть ли этот предмет в массиве если да -true если нет false 
+
+дальше то что изучила но наверное в будущем надо дозакрепить
+map()
+делает через new Map() создает обьект в котором можно хранить ключ-значение, он типа псевдомассива, у него можно проверить has get set 
+Set()
+делается через new Set() создает новый массив, в котором не может быть повторений 
+оператор спред ...
+по идее он типа делает новый массив не связанный с предыдщуим типа 
+const newArr = [...arr] 
+newArr === arr будет false 
+как защита от мутаций например для reverse
+А еще его можно передать функции чтобы взять элементы массива как переменные
+splice() мутирует изначальный массив, и выдает массив вырезанных элементов если условно задать его переменной const newArr = arr.splice(1, 2, "qwerty")
+ну и соотвественно параметры первое - с какого индекса начинаем резать, второе - сколько элементов вырезать, третье - на что заменить вырезанные элементы 
+filter() нууу он может включать в себе фукнцию...и если в этой функции написать что-то в духе el !== 123 то он сделает массив без 123
+
+*/
