@@ -594,3 +594,148 @@ var minimumEffort = function(tasks) {
 };
 
 console.log(minimumEffort(tasksEnergy))
+
+
+/*
+1674. Minimum Moves to Make Array Complementary
+
+You are given an integer array nums of even length n and an integer limit. In one move, you can replace any integer from nums with another integer between 1 and limit, inclusive.
+
+The array nums is complementary if for all indices i (0-indexed), nums[i] + nums[n - 1 - i] equals the same number. For example, the array [1,2,3,4] is complementary because for all indices i, nums[i] + nums[n - 1 - i] = 5.
+
+Return the minimum number of moves required to make nums complementary.
+
+    
+*/
+let numsEven = [1,2,4,3];
+let limit = 4
+
+/*
+var minMoves = function(nums, limit) {
+    //1+2 = 3
+    //2+4 = 6
+    //4+3 = 7
+    //16 / 4 
+    for (let i = 0; i < limit; i++) {
+        //так мы знаем что разница между числами не может составлять больше 4
+        //3; 6; 7; 4; надо это как-то уровнять как мы это можем сделать?
+        //самое логичное предположение надо отсортировать циферки по убыванию
+        //и нет это нам ничего не даст ххм
+        //проверять if 1 + 2 = 3 сохранять разницу? или может нужен %
+        //или надо ее решать на подобии прошлой сохраняяя как бы мин число которое нужно
+        //1 + 2 = 3 ; 4 - 3 = 1 
+        //2 + 4 = 6; 4 - 6 = -2 
+        //4 + 3 = 7; 4 - 8 = -3 да не наверное не то
+    }
+};
+
+ладно, я сдаюсь, это ту мач для меня пойду решать что-то под уровень 
+*/
+
+/*
+There are n kids with candies. You are given an integer array candies, where each candies[i] represents the number of candies the ith kid has, and an integer extraCandies, denoting the number of extra candies that you have.
+
+Return a boolean array result of length n, where result[i] is true if, after giving the ith kid all the extraCandies, they will have the greatest number of candies among all the kids, or false otherwise.
+
+Note that multiple kids can have the greatest number of candies.
+
+*/
+
+
+let candies = [1,10,10,3]
+let extraCandies = 1;
+
+var kidsWithCandies = function(candies, extraCandies) {
+    let sss = [...candies].sort((a, b) => a - b);
+    let max = sss[sss.length - 1];
+    console.log(sss)
+    let newArr =[]
+    for (let i = 0; i < candies.length; i++) {
+        if ((candies[i] + extraCandies) >= max) {
+            newArr.push(true)
+        } else {
+            newArr.push(false)
+        }
+    }
+
+    return newArr
+};
+
+kidsWithCandies(candies, extraCandies)
+
+
+/*
+You have a long flowerbed in which some of the plots are planted, and some are not. However, flowers cannot be planted in adjacent plots.
+
+Given an integer array flowerbed containing 0's and 1's,
+ where 0 means empty and 1 means not empty, and an integer n, 
+ return true if n new flowers can be planted in the flowerbed without violating 
+ the no-adjacent-flowers rule and false otherwise.
+
+ Example 1:
+
+Input: flowerbed = [1,0,0,0,1], n = 1
+Output: true
+Example 2:
+
+Input: flowerbed = [1,0,0,0,1], n = 2
+Output: false
+
+
+
+let flowerbed = [1,0,0,0,1]
+let n = 2;
+
+var canPlaceFlowers = function(flowerbed, n) {
+    let counter = 0;
+    for (let i = 0; i < flowerbed.length; i++) {
+        if (flowerbed[i] !== 1) {
+            if (flowerbed[i + 1] === 0 && flowerbed[i - 1] === 0) {
+                counter += 1;
+            } else {
+                continue
+            }
+        }
+    }
+
+    return counter === n
+};
+
+console.log(canPlaceFlowers(flowerbed, n))
+*/
+
+let flowerbed = [1,0,0,0,1]
+let n = 2;
+
+
+var canPlaceFlowers = function(flowerbed, n) {
+    let counter = 0;
+    
+    for (let i = 0; i < flowerbed.length; i++) {
+        if (flowerbed[i] === 0) {
+            let left = (flowerbed[i-1] === 0) || (i === 0 )
+            //будет true если сосед пустой, второе для начального ибо у начасльного 
+            // нет соседа будет АШибка
+            let right = (i === flowerbed.length-1) || (flowerbed[i+1] === 0)
+            //тут надо провернуть тоже самое
+            //если итерация что сейчас равно длинне массива - 1 то true (проверка конца)
+            //т.е условно длинна 5 сейчас итерация 4 (т.е мы на элементе 5 т.к подсчет 
+            // идет с 0 ) соответственно элемента с индексом 5 нету и поэтому 5-4 = 4 
+            //ну и 4 = 4 т.е это последний элемент
+            if (left && right)  { 
+                //если они обра true то должны высадить в это место растение
+                flowerbed[i] = 1;
+                //теперь увеличиваем counter 
+                counter += 1;
+                //
+                i++;
+            }
+        }
+    }
+
+    return counter >= n
+
+};  
+
+canPlaceFlowers(flowerbed, n)
+
